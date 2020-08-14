@@ -1,0 +1,25 @@
+!UnitStatBlock
+name: goblin o
+tag: Small humanoid (goblinoid), neutral evil
+page: 167
+health: 7 (2d6)
+armor: 15
+speed: 30 ft.
+extras:
+- Skills Stealth +6 Senses darkvision 60 ft., passive Perception 9
+- Languages Common, Goblin
+- Challenge 1/4 (50 XP)
+actions:
+- 'Scimitar. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6
+  + 2) slashing damage.'
+- 'Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5
+  (1d6 + 2) piercing damage.'
+traits:
+- Nimble Escape. The goblin can take the Disengage or Hide action as a bonus action
+  on each ofits turns.
+str: 8
+dex: 14
+con: 10
+int: 10
+wis: 8
+cha: 8

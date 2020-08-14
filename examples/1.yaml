@@ -1,0 +1,30 @@
+-
+    name: Boblin
+    initiative: 12
+    health: 9
+    maxHealth: 9
+    extra: examples/goblin-o.yaml
+-
+    name: Covork
+    initiative: 5
+    health: 19
+    maxHealth: 19
+    extra: examples/goblin-o.yaml
+-
+    name: Dodo
+    initiative: 24
+    health: 43
+    maxHealth: 54
+    extra: examples/bugbear.yaml
+-
+    name: Great hero
+    initiative: 20
+    health: 39
+    maxHealth: 39
+    extra: examples/hero.yaml
+-
+    name: Not Great Hero
+    initiative: -1
+    health: 29
+    maxHealth: 29
+    extra: examples/hero.yaml
