@@ -44,16 +44,18 @@ selectedUnitL f state =
 fromList :: [U.Unit] -> TableState
 fromList u = TableState (I.fromList u) 0
 
-handleTableEvent :: TableState -> BrickEvent n e -> EventM n (Next TableState)
-handleTableEvent state event = case event of
-    VtyEvent (V.EvKey V.KUp []) -> continue $ selectPrev
-    VtyEvent (V.EvKey V.KDown []) -> continue $ selectNext
-    VtyEvent (V.EvKey (V.KChar 'n') []) -> continue $ step
-    _ -> continue state
+handleTableEvent :: BrickEvent n e -> EventM n TableState ()
+handleTableEvent event = do
+    state <- get
+    case event of
+        VtyEvent (V.EvKey V.KUp []) -> put $ selectPrev state
+        VtyEvent (V.EvKey V.KDown []) -> put $ selectNext state
+        VtyEvent (V.EvKey (V.KChar 'n') []) -> put $ step state
+        _ -> return ()
     where
-        selectPrev = state & selected %~ I.prevKey (_order state)
-        selectNext = state & selected %~ I.nextKey (_order state)
-        step = state & order %~ I.step
+        selectPrev state = state & selected %~ I.prevKey (_order state)
+        selectNext state = state & selected %~ I.nextKey (_order state)
+        step state = state & order %~ I.step
 
 renderInitiativeTable :: TableState -> Widget n
 renderInitiativeTable dat = renderList $ zip [0..] $ I.toList $ order'
@@ -68,10 +70,10 @@ renderInitiativeTable dat = renderList $ zip [0..] $ I.toList $ order'
         hp u = (show $ U._health u) ++ "/" ++ (show $ U._maxHealth u)
         display :: (U.Unit -> String) -> (Int, U.Unit) -> Widget n
         display field (i, unit) = withAttr attr $ str $ field unit
-            where attr = "iniTable" <> sel <> curr <> dead
-                  curr = condAttr (isCurrent i) "current"
-                  dead = condAttr (U.isDead unit) "dead"
-                  sel = condAttr (i == _selected dat) "selected"
+            where attr = (attrName "iniTable") <> sel <> curr <> dead
+                  curr = condAttr (isCurrent i) (attrName "current")
+                  dead = condAttr (U.isDead unit) (attrName "dead")
+                  sel = condAttr (i == _selected dat) (attrName "selected")
                   condAttr cond attr' = if cond then attr' else mempty
 
 commands :: [Command TableState]
@@ -96,6 +98,6 @@ commands = [nextTurn, damage, heal, roll]
         
         current s = unitMark (s ^. currentUnitL) :: FancyText
         selected' s = unitMark (s ^. selectedUnitL)
-        unitMark u = FancyText ("log" <> "link") (u ^. U.name)
-        fancy x = FancyText ("log" <> "link") (show x)
+        unitMark u = FancyText (attrName "log" <> attrName "link") (u ^. U.name)
+        fancy x = FancyText (attrName "log" <> attrName "link") (show x)
 

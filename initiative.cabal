@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.36.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eb4fa5c10303dc2bae098e953e0b28265a6c4f4db1981780c1c15890202643d3
+-- hash: 6d5da297e7079da9d0e9fb2cc23f3ef035c205333633ed9e48af1ce153143b22
 
 name:           initiative
 version:        0.1.0.0
@@ -38,18 +38,18 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson ==1.4.*
+      aeson ==2.2.*
     , base >=4.7 && <5
-    , brick >=0.52 && <0.53
-    , containers >=0.6 && <0.7
-    , microlens-platform >=0.4 && <0.5
+    , brick ==2.4.*
+    , containers ==0.6.*
+    , microlens-platform ==0.4.*
     , mtl >=2.2 && <3.0
     , parsec ==3.1.*
-    , random ==1.1.*
+    , random ==1.2.*
     , split ==0.2.*
-    , text >=1.2 && <1.3
-    , vty >=5.28 && <6.0
-    , yaml >=0.11 && <0.12
+    , text ==2.1.*
+    , vty ==6.2.*
+    , yaml ==0.11.*
   default-language: Haskell2010
 
 executable initiative-exe
@@ -65,19 +65,19 @@ executable initiative-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall
   build-depends:
-      aeson ==1.4.*
+      aeson ==2.2.*
     , base >=4.7 && <5
-    , brick >=0.52 && <0.53
-    , containers >=0.6 && <0.7
+    , brick ==2.4.*
+    , containers ==0.6.*
     , initiative
-    , microlens-platform >=0.4 && <0.5
+    , microlens-platform ==0.4.*
     , mtl >=2.2 && <3.0
     , parsec ==3.1.*
-    , random ==1.1.*
+    , random ==1.2.*
     , split ==0.2.*
-    , text >=1.2 && <1.3
-    , vty >=5.28 && <6.0
-    , yaml >=0.11 && <0.12
+    , text ==2.1.*
+    , vty ==6.2.*
+    , yaml ==0.11.*
   default-language: Haskell2010
 
 test-suite initiative-test
@@ -89,17 +89,17 @@ test-suite initiative-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson ==1.4.*
+      aeson ==2.2.*
     , base >=4.7 && <5
-    , brick >=0.52 && <0.53
-    , containers >=0.6 && <0.7
+    , brick ==2.4.*
+    , containers ==0.6.*
     , initiative
-    , microlens-platform >=0.4 && <0.5
+    , microlens-platform ==0.4.*
     , mtl >=2.2 && <3.0
     , parsec ==3.1.*
-    , random ==1.1.*
+    , random ==1.2.*
     , split ==0.2.*
-    , text >=1.2 && <1.3
-    , vty >=5.28 && <6.0
-    , yaml >=0.11 && <0.12
+    , text ==2.1.*
+    , vty ==6.2.*
+    , yaml ==0.11.*
   default-language: Haskell2010
