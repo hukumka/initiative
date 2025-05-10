@@ -19,30 +19,30 @@ renderStatWidget' c = (phys <+> (str " ") <+> mental <+> (str " ") <+> rest)
         <=> traits
         <=> attacks
     where 
-        phys = (attrName "str: " <+> statWidget U.str)
-            <=> (attrName "dex: " <+> statWidget U.dex)
-            <=> (attrName "con: " <+> statWidget U.con)
-        mental = (attrName "wis: " <+> statWidget U.wis)
-            <=> (attrName "int: " <+> statWidget U.int)
-            <=> (attrName "cha: " <+> statWidget U.cha)
-        rest = (attrName "AC: " <+> attrWidget U.armorClass)
-            <=> (attrName "speed: " <+> attrWidget U.speed)
-        traits = vBox $ map (colorName $ "stats" <> "trait") $ U.traits c
+        phys = (attrNameWidget "str: " <+> statWidget U.str)
+            <=> (attrNameWidget "dex: " <+> statWidget U.dex)
+            <=> (attrNameWidget "con: " <+> statWidget U.con)
+        mental = (attrNameWidget "wis: " <+> statWidget U.wis)
+            <=> (attrNameWidget "int: " <+> statWidget U.int)
+            <=> (attrNameWidget "cha: " <+> statWidget U.cha)
+        rest = (attrNameWidget "AC: " <+> attrWidget U.armorClass)
+            <=> (attrNameWidget "speed: " <+> attrWidget U.speed)
+        traits = vBox $ map (colorName $ attrName "stats" <> attrName "trait") $ U.traits c
         extras = vBox $ map str $ U.extras c
-        attrName s = withAttr ("stats" <> "attrName") $ str s
-        attacks = vBox $ map (colorName $ "stats" <> "action") $ U.attacks c
+        attrNameWidget s = withAttr (attrName "stats" <> attrName "attrName") $ str s
+        attacks = vBox $ map (colorName $ attrName "stats" <> attrName "action") $ U.attacks c
         attrWidget getter = let attr = getter c
-                             in withAttr "stats" $ str $ show attr
+                             in withAttr (attrName "stats") $ str $ show attr
         statWidget getter = let attr = getter c
                                 bonus = U.attributeBonus attr
                                 text = show attr ++ " (" ++ show bonus ++ ")"
-                            in withAttr "stats" $ str text
+                            in withAttr (attrName "stats") $ str text
 
 colorName :: AttrName -> String -> Widget n
 colorName attr s = let (t:h) = splitOn "." s
-                       head = FancyText attr (t ++ ": ")
-                       tail = words $ concat $ h
-                    in renderFancy (head:tail)
+                       head' = FancyText attr (t ++ ": ")
+                       tail' = words' $ concat $ h
+                    in renderFancy (head':tail')
     where
-        words = map word . splitOn " "
-        word w = FancyText "stats" $ w ++ " "
+        words' = map word . splitOn " "
+        word w = FancyText (attrName "stats") $ w ++ " "

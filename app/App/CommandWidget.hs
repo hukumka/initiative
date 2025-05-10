@@ -24,12 +24,14 @@ data CommandState = CommandState{
     _err :: String
 }
 makeLenses ''CommandState
+initState :: CommandState
 initState = CommandState "" ""
 
+update :: CommandState -> EventH s
 update x = EventH x Nothing
 
 renderCommandWidget :: CommandSet s -> CommandState -> Widget n
-renderCommandWidget commands inp = withAttr "cmd" $ padRight Max
+renderCommandWidget commands inp = withAttr (attrName "cmd") $ padRight Max
         $ case pick of
             Right p -> definite p
             Left e -> str (_input inp) <+> err' e
@@ -46,8 +48,8 @@ renderCommandWidget commands inp = withAttr "cmd" $ padRight Max
                     C.prefix=prefix, 
                     C.args=args
                 } = pick
-                completion = withAttr ("cmd" <> "completion") $ str syffix
-        err' msg = withAttr ("cmd" <> "error") $ padLeft Max $ str msg
+                completion = withAttr (attrName "cmd" <> attrName "completion") $ str syffix
+        err' msg = withAttr (attrName "cmd" <> attrName "error") $ padLeft Max $ str msg
 
 handleCmdEvents :: CommandSet s -> CommandState -> BrickEvent n e -> EventH s
 handleCmdEvents commands inp e = 

@@ -1,10 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE RankNTypes #-}
 {-# Language OverloadedStrings #-}
 module Main where
 
 import Control.Monad.IO.Class(liftIO)
-import Lens.Micro.Platform((^.), (%~), makeLenses, Lens')
+import Lens.Micro.Platform((^.), (%~), makeLenses, Lens', zoom)
 import System.Environment(getArgs)
 
 import Prelude hiding (log)
@@ -40,19 +41,23 @@ main = do
                 appChooseCursor = (\_ _ -> Nothing),
                 appAttrMap = const myAttrMap,
                 appHandleEvent = handleEvent,
-                appStartEvent = return
+                appStartEvent = return ()
               }
 
-handleEvent :: AppState -> BrickEvent n e -> EventM n (Next AppState)
-handleEvent state event = case event of
-    VtyEvent (V.EvKey V.KEsc []) -> halt state
-    _ -> let CW.EventH s mc = CW.handleCmdEvents commands (_cmd state) event
-             state' = state {_cmd = s}
-          in case mc of
-                Just c -> do
-                   (state'', l) <- liftIO $ c state'
-                   continue $ log %~ (append l) $ state''
-                Nothing -> lensEvent initiative IT.handleTableEvent state' event
+handleEvent :: BrickEvent n e -> EventM n AppState ()
+handleEvent event = case event of
+    VtyEvent (V.EvKey V.KEsc []) -> halt
+    _ -> do
+        state <- get
+        let CW.EventH command_state command_action = CW.handleCmdEvents commands (_cmd state) event
+        put $ state {_cmd = command_state}
+        case command_action of
+            Just c -> do
+                state' :: AppState <- get
+                (state'', l) <- liftIO $ c state'
+                put $ log %~ (append l) $ state''
+            Nothing -> do
+                zoom initiative $ IT.handleTableEvent event
 
 renderApp :: AppState -> Widget ()
 renderApp state = (table <+> leftPanel) <=> (padTop Max $ logWidget) <=> cmd'
@@ -91,9 +96,3 @@ readUnits = do
             return $ U.extra %~ const config $ u
         getUnitConfig = decodeFileThrow :: FilePath -> IO U.UnitConfig
 
-type EventHandler a n e = (a -> BrickEvent n e -> EventM n (Next a))
-
-lensEvent :: Lens' b a -> EventHandler a n e -> EventHandler b n e
-lensEvent l handler state event = (update <$>) <$> handler (state ^. l) event
-    where
-        update x = l %~ const x $ state
