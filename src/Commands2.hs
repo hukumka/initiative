@@ -52,7 +52,7 @@ mapCommand lens command = command { _action = action' }
 runCommand :: Command s l -> String -> Either String (s -> IO (s, l))
 runCommand = _action
 
-data CommandSet s l = CommandSet [Command s l]
+newtype CommandSet s l = CommandSet [Command s l]
 data CommandPick s l = CommandPick {
     command :: Command s l,
     prefix :: String,

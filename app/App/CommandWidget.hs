@@ -24,8 +24,10 @@ data CommandState = CommandState{
     _err :: String
 }
 makeLenses ''CommandState
+initState :: CommandState
 initState = CommandState "" ""
 
+update :: CommandState -> EventH s
 update x = EventH x Nothing
 
 renderCommandWidget :: CommandSet s -> CommandState -> Widget n

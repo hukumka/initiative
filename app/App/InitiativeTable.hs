@@ -50,12 +50,10 @@ handleTableEvent event = do
     case event of
         VtyEvent (V.EvKey V.KUp []) -> put $ selectPrev state
         VtyEvent (V.EvKey V.KDown []) -> put $ selectNext state
-        VtyEvent (V.EvKey (V.KChar 'n') []) -> put $ step state
         _ -> return ()
     where
         selectPrev state = state & selected %~ I.prevKey (_order state)
         selectNext state = state & selected %~ I.nextKey (_order state)
-        step state = state & order %~ I.step
 
 renderInitiativeTable :: TableState -> Widget n
 renderInitiativeTable dat = renderList $ zip [0..] $ I.toList $ order'
